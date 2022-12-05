@@ -1,6 +1,43 @@
 pub fn day5() {
     let input = super::get_input();
 
+    let mut stacks = parse_crate_stacks(&input);
+
+    make_moves(&input, &mut stacks);
+
+    let topmost_crates: String = stacks.iter().map(|s| s.last().unwrap()).collect();
+    println!("Topmost crates: {topmost_crates}");
+}
+
+fn make_moves(input: &[String], stacks: &mut Vec<Vec<char>>) {
+    let first_move_idx = input
+        .iter()
+        .position(|line| line.starts_with("move"))
+        .unwrap();
+
+    let moves = &input[first_move_idx..];
+
+    for m in moves {
+        let a: Vec<usize> = m
+            .split_ascii_whitespace()
+            .filter_map(|s| s.parse::<usize>().ok())
+            .collect();
+
+        assert!(a.len() == 3);
+
+        let n_crates_moved = a[0];
+        let from = a[1] - 1;
+        let to = a[2] - 1;
+
+        for _ in 0..n_crates_moved {
+            if let Some(crate_id) = stacks[from].pop() {
+                stacks[to].push(crate_id);
+            }
+        }
+    }
+}
+
+fn parse_crate_stacks(input: &[String]) -> Vec<Vec<char>> {
     let mut stacks: Vec<Vec<char>> = Default::default();
 
     // find the line that indexes the crate columns
@@ -23,6 +60,5 @@ pub fn day5() {
         }
     }
 
-    dbg!(stacks);
-
+    stacks
 }
