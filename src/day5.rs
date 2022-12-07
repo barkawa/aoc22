@@ -1,15 +1,25 @@
+enum Part {
+    One,
+    Two,
+}
+
 pub fn day5() {
     let input = super::get_input();
 
-    let mut stacks = parse_crate_stacks(&input);
+    let stacks = parse_crate_stacks(&input);
 
-    make_moves(&input, &mut stacks);
+    let resulting_stacks = make_moves(&input, &stacks, Part::One);
+    let topmost_crates: String = resulting_stacks.iter().map(|s| s.last().unwrap()).collect();
+    println!("part1: {topmost_crates}");
 
-    let topmost_crates: String = stacks.iter().map(|s| s.last().unwrap()).collect();
-    println!("Topmost crates: {topmost_crates}");
+    let resulting_stacks = make_moves(&input, &stacks, Part::Two);
+    let topmost_crates: String = resulting_stacks.iter().map(|s| s.last().unwrap()).collect();
+    println!("part1: {topmost_crates}");
 }
 
-fn make_moves(input: &[String], stacks: &mut Vec<Vec<char>>) {
+fn make_moves(input: &[String], stacks: &Vec<Vec<char>>, part: Part) -> Vec<Vec<char>> {
+    let mut stacks = stacks.clone();
+
     let first_move_idx = input
         .iter()
         .position(|line| line.starts_with("move"))
@@ -18,23 +28,34 @@ fn make_moves(input: &[String], stacks: &mut Vec<Vec<char>>) {
     let moves = &input[first_move_idx..];
 
     for m in moves {
-        let a: Vec<usize> = m
-            .split_ascii_whitespace()
-            .filter_map(|s| s.parse::<usize>().ok())
-            .collect();
+        let (n_crates_moved, from, to) = parse_move(&m);
 
-        assert!(a.len() == 3);
-
-        let n_crates_moved = a[0];
-        let from = a[1] - 1;
-        let to = a[2] - 1;
-
-        for _ in 0..n_crates_moved {
-            if let Some(crate_id) = stacks[from].pop() {
-                stacks[to].push(crate_id);
+        match part {
+            Part::One => {
+                for _ in 0..n_crates_moved {
+                    if let Some(crate_id) = stacks[from].pop() {
+                        stacks[to].push(crate_id);
+                    }
+                }
+            }
+            Part::Two => {
+                let len = stacks[from].len();
+                let moved_crates: Vec<_> = stacks[from].drain(len - n_crates_moved..).collect();
+                stacks[to].extend(moved_crates);
             }
         }
     }
+
+    stacks
+}
+
+fn parse_move(line: &str) -> (usize, usize, usize) {
+    let a: Vec<usize> = line
+        .split_ascii_whitespace()
+        .filter_map(|s| s.parse::<usize>().ok())
+        .collect();
+
+    (a[0], a[1]-1, a[2]-1)
 }
 
 fn parse_crate_stacks(input: &[String]) -> Vec<Vec<char>> {
