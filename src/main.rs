@@ -6,6 +6,7 @@ mod day2;
 mod day3;
 mod day4;
 mod day5;
+mod day6;
 
 pub fn get_input() -> Vec<String> {
     io::stdin().lock().lines().map(Result::unwrap).collect()
@@ -27,6 +28,7 @@ fn main() {
         3 => day3::day3(),
         4 => day4::day4(),
         5 => day5::day5(),
+        6 => day6::day6(),
         _ => {
             if day < 0 || day > 24 {
                 println!("That's not in the advents calendar");
