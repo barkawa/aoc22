@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-pub fn day6 () {
+pub fn day6() {
     let input = super::get_input();
 
     assert!(input.len() == 1);
