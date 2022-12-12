@@ -64,6 +64,18 @@ fn traverse(node: &Node, total_size: &mut usize) {
     }
 }
 
+fn traverse2(node: &Node, closest: &mut usize, target: usize) {
+    if node.data.kind == Directory {
+        let size = node.data.size.unwrap();
+        if size >= target && size < *closest {
+            *closest = size;
+        }
+        for child in node.children.iter() {
+            traverse2(child, closest, target);
+        }
+    }
+}
+
 pub fn day7() {
     unsafe {
         let input = super::get_input();
@@ -131,9 +143,16 @@ pub fn day7() {
 
         dbg!(total_size);
 
+        // part 2
         let free_space = 70000000 - root_size;
+        let need_to_free = 30000000 - free_space;
 
-        dbg!(free_space);
+        println!("{free_space} out of 70000000 free");
+
+        let mut closest = std::usize::MAX;
+        traverse2(&root_node, &mut closest, need_to_free);
+
+        dbg!(closest);
 
     }
 }
