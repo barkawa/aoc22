@@ -1,4 +1,4 @@
-use std::{fmt::Display, vec};
+use std::vec;
 
 pub fn day8() {
     let input = super::get_input();
@@ -125,15 +125,4 @@ fn check_visibility(
 
         }
     }
-}
-
-fn print<T>(forest: &[Vec<T>])
-    where T: Display {
-    for row in forest {
-        for tree in row {
-            print!("{tree}");
-        }
-        println!();
-    }
-    println!();
 }
