@@ -23,12 +23,11 @@ pub fn day8() {
     dbg!(score);
 }
 
-
 fn get_best_scenic_score(forest: &[Vec<i8>]) -> i64 {
     let mut best = 0;
-    
+
     for i in 0..forest.len() {
-        for j in 0..forest.len() {                        
+        for j in 0..forest.len() {
             let score = get_scenic_score(forest, (i, j));
 
             if score > best {
@@ -46,7 +45,7 @@ fn get_scenic_score(forest: &[Vec<i8>], idx: (usize, usize)) -> i64 {
     let mut score = 1;
 
     let mut d = 0;
-    for ii in (i+1)..forest.len() {
+    for ii in (i + 1)..forest.len() {
         d += 1;
         if forest[ii][j] >= h {
             break;
@@ -64,7 +63,7 @@ fn get_scenic_score(forest: &[Vec<i8>], idx: (usize, usize)) -> i64 {
     score *= d;
 
     let mut d = 0;
-    for jj in (j+1)..forest.len() {
+    for jj in (j + 1)..forest.len() {
         d += 1;
         if forest[i][jj] >= h {
             break;
@@ -81,14 +80,10 @@ fn get_scenic_score(forest: &[Vec<i8>], idx: (usize, usize)) -> i64 {
     }
     score *= d;
 
-
     score as i64
 }
 
-fn check_visibility(
-    forest: &[Vec<i8>],
-    viz: &mut Vec<Vec<bool>>,
-) {
+fn check_visibility(forest: &[Vec<i8>], viz: &mut Vec<Vec<bool>>) {
     let l = forest.len();
 
     for i in 0..l {
@@ -105,24 +100,22 @@ fn check_visibility(
             }
 
             // up
-            if forest[l - (j+1)][i] > tallest_up {
-                viz[l - (j+1)][i] = true;
-                tallest_up = forest[l - (j+1)][i];
+            if forest[l - (j + 1)][i] > tallest_up {
+                viz[l - (j + 1)][i] = true;
+                tallest_up = forest[l - (j + 1)][i];
             }
 
             // left
-            if forest[i][l - (j+1)] > tallest_left {
-                viz[i][l - (j+1)] = true;
-                tallest_left = forest[i][l - (j+1)];
+            if forest[i][l - (j + 1)] > tallest_left {
+                viz[i][l - (j + 1)] = true;
+                tallest_left = forest[i][l - (j + 1)];
             }
-            
+
             // right
             if forest[i][j] > tallest_right {
                 viz[i][j] = true;
                 tallest_right = forest[i][j];
             }
-
-
         }
     }
 }
