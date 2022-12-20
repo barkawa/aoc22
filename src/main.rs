@@ -1,6 +1,8 @@
 use std::env;
 use std::io::{self, BufRead};
 
+mod graph;
+
 mod day1;
 mod day2;
 mod day3;
@@ -11,6 +13,7 @@ mod day7;
 mod day8;
 mod day14;
 mod day15;
+mod day16;
 
 pub fn get_input() -> Vec<String> {
     io::stdin().lock().lines().map(Result::unwrap).collect()
@@ -37,6 +40,7 @@ fn main() {
         8 => day8::day8(),
         14 => day14::day14(),
         15 => day15::day15(),
+        16 => day16::day16(),
         _ => {
             if day < 0 || day > 24 {
                 println!("That's not in the advents calendar");
